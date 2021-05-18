@@ -7,10 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using app.Models;
 using System.IO;
-using Syncfusion.DocIO.DLS;
-using Syncfusion.DocIO;
-using Syncfusion.Pdf;
-using Syncfusion.DocIORenderer;
+using SkiaSharp;
 
 namespace app.Controllers
 {
@@ -27,42 +24,18 @@ namespace app.Controllers
     {
       if (button == null)
         return View();
-      MemoryStream outputStream;
       try
       {
-        // Loads document from stream.
-        WordDocument document = new WordDocument();
-        document.EnsureMinimal();
-        document.LastParagraph.AppendText("Document from Openshift");
-
-        ////Instantiation of DocIORenderer for Word to PDF conversion
-        DocIORenderer render = new DocIORenderer();
-        //Converts Word document into PDF document
-        PdfDocument pdfDocument = render.ConvertToPDF(document);
-        //Releases all resources used by the Word document and DocIO Renderer objects
-        render.Dispose();
-        document.Dispose();
-        //Saves the PDF file
-        outputStream = new MemoryStream();
-        pdfDocument.Save(outputStream);
-        //Closes the instance of PDF document object
-        pdfDocument.Close();
-
-        //outputStream = new MemoryStream();
-        //document.Save(outputStream, FormatType.Docx);
-        //document.Dispose();
-
-        outputStream.Position = 0;
-
+        SKBitmap m_sKBitmap = new SKBitmap(100, 100, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
+        ViewBag.Error = "Measuring Completed Properly.";
       }
       catch (Exception e)
       {
-        ViewBag.Error = "SkiaNativeAssets.NoDependencies   " + e.Message + e.StackTrace.ToString();
+        ViewBag.Error = e.Message + e.StackTrace.ToString();
         return View();
 
       }
-      return File(outputStream, "application/pdf", "Test.pdf");
-      //return File(outputStream, "application/msword", "Test.docx");
+      return View();
     }
 
     public IActionResult Privacy()
