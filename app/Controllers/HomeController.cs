@@ -7,10 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using app.Models;
 using System.IO;
-using Syncfusion.DocIO.DLS;
-using Syncfusion.DocIO;
-using Syncfusion.Pdf;
-using Syncfusion.DocIORenderer;
+using Aspose.Words;
 
 namespace app.Controllers
 {
@@ -30,23 +27,31 @@ namespace app.Controllers
       MemoryStream outputStream;
       try
       {
-        // Loads document from stream.
-        WordDocument document = new WordDocument();
-        document.EnsureMinimal();
-        document.LastParagraph.AppendText("Document from Openshift");
+        // load the file to be converted
+        Document document = new Document();
 
-        ////Instantiation of DocIORenderer for Word to PDF conversion
-        DocIORenderer render = new DocIORenderer();
-        //Converts Word document into PDF document
-        PdfDocument pdfDocument = render.ConvertToPDF(document);
-        //Releases all resources used by the Word document and DocIO Renderer objects
-        render.Dispose();
-        document.Dispose();
+        DocumentBuilder builder = new DocumentBuilder(document);
+
+        // Specify font formatting
+        Font font = builder.Font;
+        font.Size = 16;
+        font.Bold = true;
+        font.Color = System.Drawing.Color.Blue;
+        font.Name = "Arial";
+        font.Underline = Underline.Dash;
+
+        // Specify paragraph formatting
+        ParagraphFormat paragraphFormat = builder.ParagraphFormat;
+        paragraphFormat.FirstLineIndent = 8;
+        paragraphFormat.Alignment = ParagraphAlignment.Justify;
+        paragraphFormat.KeepTogether = true;
+
+        builder.Writeln("Aspose paragraph.");
+
         //Saves the PDF file
         outputStream = new MemoryStream();
-        pdfDocument.Save(outputStream);
-        //Closes the instance of PDF document object
-        pdfDocument.Close();
+        // save in different formats
+        document.Save(outputStream, Aspose.Words.SaveFormat.Pdf);
 
         //outputStream = new MemoryStream();
         //document.Save(outputStream, FormatType.Docx);

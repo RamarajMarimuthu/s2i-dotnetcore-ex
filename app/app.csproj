@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Syncfusion.DocIORenderer.Net.Core" Version="19.1.0.63" />
+    <PackageReference Include="Aspose.Words" Version="21.5.0" />
   </ItemGroup>
 
 
