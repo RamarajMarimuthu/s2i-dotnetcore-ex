@@ -49,7 +49,7 @@ namespace app.Controllers
       }
       catch (Exception e)
       {
-        ViewBag.Error = "SkiaNativeAssets.NoDependencies   " + e.Message + e.StackTrace.ToString();
+        ViewBag.Error = e.Message + e.StackTrace.ToString();
         return View();
 
       }
