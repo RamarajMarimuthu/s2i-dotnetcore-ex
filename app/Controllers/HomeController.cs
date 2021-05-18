@@ -9,6 +9,8 @@ using app.Models;
 using System.IO;
 using Syncfusion.DocIO.DLS;
 using Syncfusion.DocIO;
+using Syncfusion.Pdf;
+using Syncfusion.DocIORenderer;
 
 namespace app.Controllers
 {
@@ -34,21 +36,21 @@ namespace app.Controllers
         document.LastParagraph.AppendText("Document from Openshift");
 
         ////Instantiation of DocIORenderer for Word to PDF conversion
-        //DocIORenderer render = new DocIORenderer();
-        ////Converts Word document into PDF document
-        //PdfDocument pdfDocument = render.ConvertToPDF(document);
-        ////Releases all resources used by the Word document and DocIO Renderer objects
-        //render.Dispose();
-        //document.Dispose();
-        ////Saves the PDF file
-        //outputStream = new MemoryStream();
-        //pdfDocument.Save(outputStream);
-        ////Closes the instance of PDF document object
-        //pdfDocument.Close();
-
-        outputStream = new MemoryStream();
-        document.Save(outputStream, FormatType.Docx);
+        DocIORenderer render = new DocIORenderer();
+        //Converts Word document into PDF document
+        PdfDocument pdfDocument = render.ConvertToPDF(document);
+        //Releases all resources used by the Word document and DocIO Renderer objects
+        render.Dispose();
         document.Dispose();
+        //Saves the PDF file
+        outputStream = new MemoryStream();
+        pdfDocument.Save(outputStream);
+        //Closes the instance of PDF document object
+        pdfDocument.Close();
+
+        //outputStream = new MemoryStream();
+        //document.Save(outputStream, FormatType.Docx);
+        //document.Dispose();
 
         outputStream.Position = 0;
 
@@ -59,9 +61,8 @@ namespace app.Controllers
         return View();
 
       }
-      //return File(outputStream, "application/pdf", "Test.pdf");
-      return File(outputStream, "application/msword", "Test.docx");
-
+      return File(outputStream, "application/pdf", "Test.pdf");
+      //return File(outputStream, "application/msword", "Test.docx");
     }
 
     public IActionResult Privacy()
