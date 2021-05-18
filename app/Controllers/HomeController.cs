@@ -26,8 +26,22 @@ namespace app.Controllers
         return View();
       try
       {
-        SKBitmap m_sKBitmap = new SKBitmap(100, 100, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
-        ViewBag.Error = "Measuring Completed Properly.";
+        SKBitmap bitmap = new SKBitmap(100, 100, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
+        var surface = SKSurface.Create(bitmap.Info);
+        SKCanvas canvas = surface.Canvas;
+        canvas.Clear(SKColors.White);
+        var paint = new SKPaint();
+        paint.IsAntialias = true;
+        paint.Color = SKColors.Red;
+        paint.StrokeWidth = 3;
+        string fontName = SKTypeface.Default.FamilyName;
+        canvas.DrawCircle(50, 50, 25, paint);
+        var image = SKImage.FromBitmap(bitmap);
+        var data = surface.Snapshot().Encode(SKEncodedImageFormat.Jpeg, 80);
+        MemoryStream outputStream = new MemoryStream();
+        data.SaveTo(outputStream);
+        outputStream.Position = 0;
+        ViewBag.Error = "Drawing Completed successfully.";
       }
       catch (Exception e)
       {
