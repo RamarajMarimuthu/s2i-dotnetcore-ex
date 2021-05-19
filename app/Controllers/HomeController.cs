@@ -6,11 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using app.Models;
-using System.IO;
-using Syncfusion.DocIO.DLS;
-using Syncfusion.DocIO;
-using Syncfusion.Pdf;
-using Syncfusion.DocIORenderer;
 
 namespace app.Controllers
 {
@@ -27,42 +22,9 @@ namespace app.Controllers
     {
       if (button == null)
         return View();
-      MemoryStream outputStream;
-      try
-      {
-        // Loads document from stream.
-        WordDocument document = new WordDocument();
-        document.EnsureMinimal();
-        document.LastParagraph.AppendText("Document from Openshift");
-
-        ////Instantiation of DocIORenderer for Word to PDF conversion
-        DocIORenderer render = new DocIORenderer();
-        //Converts Word document into PDF document
-        PdfDocument pdfDocument = render.ConvertToPDF(document);
-        //Releases all resources used by the Word document and DocIO Renderer objects
-        render.Dispose();
-        document.Dispose();
-        //Saves the PDF file
-        outputStream = new MemoryStream();
-        pdfDocument.Save(outputStream);
-        //Closes the instance of PDF document object
-        pdfDocument.Close();
-
-        //outputStream = new MemoryStream();
-        //document.Save(outputStream, FormatType.Docx);
-        //document.Dispose();
-
-        outputStream.Position = 0;
-
-      }
-      catch (Exception e)
-      {
-        ViewBag.Error = "SkiaNativeAssets.NoDependencies   " + e.Message + e.StackTrace.ToString();
+      
+        ViewBag.Error = "Clicked Successfully";
         return View();
-
-      }
-      return File(outputStream, "application/pdf", "Test.pdf");
-      //return File(outputStream, "application/msword", "Test.docx");
     }
 
     public IActionResult Privacy()
