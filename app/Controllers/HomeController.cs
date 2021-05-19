@@ -55,21 +55,21 @@ namespace app.Controllers
         // save in different formats
         document.Save(outputStream, Aspose.Words.SaveFormat.Pdf);
 
-        SKBitmap bitmap = new SKBitmap(100, 100, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
-        var surface = SKSurface.Create(bitmap.Info);
-        SKCanvas canvas = surface.Canvas;
-        canvas.Clear(SKColors.White);
-        var paint = new SKPaint();
-        paint.IsAntialias = true;
-        paint.Color = SKColors.Red;
-        paint.StrokeWidth = 3;
-        string fontName = SKTypeface.Default.FamilyName;
-        canvas.DrawCircle(50, 50, 25, paint);
-        var image = SKImage.FromBitmap(bitmap);
-        var data = surface.Snapshot().Encode(SKEncodedImageFormat.Jpeg, 80);
-        outputStream2 = new MemoryStream();
-        data.SaveTo(outputStream2);
-        outputStream2.Position = 0;
+        //SKBitmap bitmap = new SKBitmap(100, 100, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
+        //var surface = SKSurface.Create(bitmap.Info);
+        //SKCanvas canvas = surface.Canvas;
+        //canvas.Clear(SKColors.White);
+        //var paint = new SKPaint();
+        //paint.IsAntialias = true;
+        //paint.Color = SKColors.Red;
+        //paint.StrokeWidth = 3;
+        //string fontName = SKTypeface.Default.FamilyName;
+        //canvas.DrawCircle(50, 50, 25, paint);
+        //var image = SKImage.FromBitmap(bitmap);
+        //var data = surface.Snapshot().Encode(SKEncodedImageFormat.Jpeg, 80);
+        //outputStream2 = new MemoryStream();
+        //data.SaveTo(outputStream2);
+        //outputStream2.Position = 0;
 
         ViewBag.Error = "SkiaSharp loaded properly.";
 
