@@ -8,17 +8,18 @@ using Microsoft.Extensions.Logging;
 using app.Models;
 using System.IO;
 using SkiaSharp;
+using Microsoft.AspNetCore.Hosting;
 
 namespace app.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+    private readonly IHostingEnvironment _hostingEnvironment;
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
+    public HomeController(IHostingEnvironment hostingEnvironment)
+    {
+      _hostingEnvironment = hostingEnvironment;
+    }
 
     public IActionResult Index(string button)
     {
@@ -26,7 +27,10 @@ namespace app.Controllers
         return View();
       try
       {
-        SKBitmap bitmap = new SKBitmap(100, 100, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
+        string basePath = _hostingEnvironment.WebRootPath;
+        FileStream fileStreamInput = new FileStream(basePath + @"/fonts/CHILLER.TTF", FileMode.Open, FileAccess.Read);
+
+        SKBitmap bitmap = new SKBitmap(500, 500, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
         var surface = SKSurface.Create(bitmap.Info);
         SKCanvas canvas = surface.Canvas;
         canvas.Clear(SKColors.White);
@@ -34,14 +38,20 @@ namespace app.Controllers
         paint.IsAntialias = true;
         paint.Color = SKColors.Red;
         paint.StrokeWidth = 3;
+        paint.TextSize = 30;
         string fontName = SKTypeface.Default.FamilyName;
         canvas.DrawCircle(50, 50, 25, paint);
+
+        paint.Typeface = SKTypeface.FromStream(fileStreamInput);
+        canvas.DrawText("SkiaSharp", 200, 200, paint);
+
         var image = SKImage.FromBitmap(bitmap);
         var data = surface.Snapshot().Encode(SKEncodedImageFormat.Jpeg, 80);
         MemoryStream outputStream = new MemoryStream();
         data.SaveTo(outputStream);
         outputStream.Position = 0;
         ViewBag.Error = "Drawing Completed successfully.";
+        return File(outputStream, "application/png", "Test.png");
       }
       catch (Exception e)
       {
