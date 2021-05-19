@@ -1,4 +1,4 @@
-FROM dotnet/dotnet-31-runtime-centos7
+FROM dotnet/dotnet-31-runtime-rhel7
 # This image provides a .NET Core 3.1 environment you can use to run your .NET
 # applications.
 
@@ -9,7 +9,7 @@ LABEL io.k8s.description="Platform for building and running .NET Core 3.1 applic
       io.openshift.tags="builder,.net,dotnet,dotnetcore,rh-dotnet31"
 
 # Labels consumed by Red Hat build service
-LABEL name="dotnet/dotnet-31-centos7" \
+LABEL name="dotnet/dotnet-31-rhel7" \
       com.redhat.component="rh-dotnet31-container" \
       version="3.1" \
       release="1" \
@@ -25,9 +25,10 @@ USER 0
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH.
 COPY ./s2i/bin/ /usr/libexec/s2i
 
-RUN yum install -y centos-release-dotnet centos-release-scl-rh && \
-    INSTALL_PKGS="rh-nodejs10-npm rh-nodejs10-nodejs-nodemon rh-dotnet31-dotnet-sdk-3.1 rsync" && \
-    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
+RUN INSTALL_PKGS="rh-nodejs10-npm rh-nodejs10-nodejs-nodemon rh-dotnet31-dotnet-sdk-3.1 rsync" && \
+    yum install -y --setopt=tsflags=nodocs --disablerepo=\* \
+      --enablerepo=rhel-7-server-rpms,rhel-server-rhscl-7-rpms,rhel-7-server-dotnet-rpms \
+      $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     yum clean all -y && \
 # yum cache files may still exist (and quite large in size)
