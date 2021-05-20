@@ -2,7 +2,12 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:3.1 AS base
 WORKDIR /app
+LABEL io.k8s.display-name="app name" \
+      io.k8s.description="container description..." \
+      io.openshift.expose-services="8080:http"
+
 EXPOSE 8080
+ENV ASPNETCORE_URLS=http://*:8080
 
 FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
 WORKDIR /src
