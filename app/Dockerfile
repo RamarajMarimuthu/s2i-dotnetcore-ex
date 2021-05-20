@@ -7,8 +7,8 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
 WORKDIR /src
-COPY ["app/app.csproj", "app/"]
-RUN dotnet restore "app/app.csproj"
+COPY ["app.csproj", "app/"]
+RUN dotnet restore "app.csproj"
 COPY . .
 WORKDIR "/src/app"
 RUN dotnet build "app.csproj" -c Release -o /app/build
