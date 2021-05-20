@@ -11,6 +11,10 @@ FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
 #RUN dotnet restore "app/app.csproj"
 #COPY . .
 #WORKDIR "/src/app"
+
+WORKDIR /app
+RUN dotnet restore "app.csproj"
+WORKDIR "/app"
 RUN dotnet build "app.csproj" -c Release -o /app/build
 
 FROM build AS publish
