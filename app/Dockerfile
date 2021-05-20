@@ -6,6 +6,10 @@ LABEL io.k8s.display-name="app name" \
       io.k8s.description="container description..." \
       io.openshift.expose-services="8080:http"
 
+# Create a group and user so we are not running our container and application as root and thus user 0 which is a security issue.
+RUN addgroup --system --gid 1000 customgroup \
+    && adduser --system --uid 1000 --ingroup customgroup --shell /bin/sh customuser
+
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://*:8080
 
@@ -25,3 +29,6 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "app.dll"]
+
+# Tell docker that all future commands should run as the appuser user, must use the user number
+USER 1000
