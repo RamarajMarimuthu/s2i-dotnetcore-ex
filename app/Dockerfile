@@ -1,6 +1,6 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM microsoft/dotnet:2.1-aspnetcore-runtime-alpine3.7
+FROM mcr.microsoft.com/dotnet/sdk:2.1 AS build
 
 LABEL io.k8s.display-name="app name" \
       io.k8s.description="container description..." \
