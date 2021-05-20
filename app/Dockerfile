@@ -1,14 +1,16 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0-buster AS build
+#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-# set noninteractive installation
-ENV DEBIAN_FRONTEND noninteractive
-
-RUN apt-get update -y && apt-get install libfontconfig -y
+FROM mcr.microsoft.com/dotnet/aspnet:3.1 AS base
 WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
+WORKDIR /src
 COPY ["app/app.csproj", "app/"]
 RUN dotnet restore "app/app.csproj"
 COPY . .
-WORKDIR "/app/"
+WORKDIR "/src/app"
 RUN dotnet build "app.csproj" -c Release -o /app/build
 
 FROM build AS publish
